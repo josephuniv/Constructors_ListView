@@ -22,11 +22,8 @@ namespace Constructors_ListView.DataAccess
             sWriter.WriteLine(emp.EmployeeId + "," + emp.FirstName + "," + emp.LastName);
       
             MessageBox.Show("Recorded saved Successfully");
-            sWriter.Close();
-       
+            sWriter.Close();       
         }
-
-
 
         public static Employee SearchRecord(int id)
         {
@@ -34,10 +31,26 @@ namespace Constructors_ListView.DataAccess
             if (File.Exists(filePath))
             {
                 //Create the object of readtype!!!!!
+                bool flagFound = false;
                 StreamReader sReader = new StreamReader(filePath);
-                string line = sReader.ReadLine(); 
+                string line = sReader.ReadLine();
+                do
+                {
+                    string[] a = line.Split(',');
+                    if (a[0] == id.ToString())
+                    {
+                        MessageBox.Show(line);
+                        emp.EmployeeId = Convert.ToInt32(a[0]);
+                        emp.FirstName = a[1];
+                        emp.LastName = a[2];
+                        flagFound=true;
+                        break;
+                    }                    
+                    line = sReader.ReadLine();
+                } while (line != null);
+                if (!flagFound)
+                    MessageBox.Show("Not Found");
             }
-
             return emp;
         }
 
